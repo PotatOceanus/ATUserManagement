@@ -2,7 +2,7 @@ package com.ATUserManagement.service.impl;
 
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.User_detail_process;
-import com.ATUserManagement.service.AddUserService;
+import com.ATUserManagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -14,7 +14,7 @@ import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @Service
-public class AddUserServiceImpl implements AddUserService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     RestTemplate restTemplate;
@@ -36,6 +36,28 @@ public class AddUserServiceImpl implements AddUserService {
                 user_detail_generate.getTags(),
                 user_detail_generate.getStatus(),
                 user_detail_generate.getCreated(),
+                user_detail_generate.getUpdated());
+
+        return user;
+    }
+
+    @Override
+    public User updateOneUser(User user_to_update, User_detail_process user_push) {
+        User user_detail_generate = detail_generate(user_push);
+        User user_detail_guess = detail_guess(user_push.getFirstName());
+
+        User user = new User(user_detail_generate.getUsername(),
+                user_push.getPassword(),
+                user_push.getFirstName(),
+                user_push.getLastName(),
+                user_to_update.getEmail(),
+                user_push.getContactNumber(),
+                user_detail_guess.getAge(),
+                user_detail_guess.getGender(),
+                user_detail_guess.getNationality(),
+                user_detail_generate.getTags(),
+                user_detail_generate.getStatus(),
+                user_to_update.getCreated(),
                 user_detail_generate.getUpdated());
 
         return user;
