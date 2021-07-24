@@ -50,6 +50,7 @@ public class UserController {
 //        return userRepository.findAll();
 //    }
 
+
     @DeleteMapping("/user/{userName}")
     @ResponseBody
     public Map<String, Boolean> deleteOneUser(@PathVariable(value = "userName") String username)
