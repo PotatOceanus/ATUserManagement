@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/user-management")
 public class UserController {
@@ -53,16 +50,13 @@ public class UserController {
 
     @DeleteMapping("/user/{userName}")
     @ResponseBody
-    public Map<String, Boolean> deleteOneUser(@PathVariable(value = "userName") String username)
+    public void deleteOneUser(@PathVariable(value = "userName") String username)
             throws UserNotFoundException {
         User user =
                 userRepository
                         .findById(username)
                         .orElseThrow(() -> new UserNotFoundException("User(to delete) not found by this username : " + "{" + username + "}"));
         userRepository.deleteById(username);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("{" + username + "}" + " deleted.", Boolean.TRUE);
-        return response;
     }
 //
 //    @PostMapping("/update")
