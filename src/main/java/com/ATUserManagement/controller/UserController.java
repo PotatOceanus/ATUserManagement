@@ -36,6 +36,7 @@ public class UserController {
         } else {
             throw new UserExistException("User " + "{" + user_detail_process.getEmail() + "}" + " already Exist!");
         }
+
     }
 
 //    @GetMapping("/find/{userName}")
@@ -69,7 +70,7 @@ public class UserController {
 
     @PutMapping("/user")
     @ResponseBody
-    public GlobalExceptionHandler updateUser(@RequestBody User_detail_process user_update)
+    public void updateUser(@RequestBody User_detail_process user_update)
             throws UserNotFoundException {
         User user_to_update =
                 userRepository
@@ -78,7 +79,5 @@ public class UserController {
         User user = userServiceImpl.updateOneUser(user_to_update, user_update);
 
         userRepository.save(user);
-
-        return new GlobalExceptionHandler();
     }
 }
