@@ -8,8 +8,14 @@ import com.ATUserManagement.exceptions.UserNotFoundException;
 import com.ATUserManagement.repository.UserRepository;
 import com.ATUserManagement.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user-management")
@@ -50,11 +56,24 @@ public class UserController {
 //        return user;
 //    }
 //
-//    @GetMapping("/find/all")
-//    @ResponseBody
-//    public List<User> findUser() {
-//        return userRepository.findAll();
-//    }
+    @GetMapping("/user/list")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> findUser(@RequestParam int page, @RequestParam int pageSize) {
+        List<User> users = new ArrayList<User>();
+        Pageable paging = PageRequest.of(page, pageSize);
+
+        Page<User> pageTuts;
+        pageTuts = userRepository.findAll(paging);
+        users = pageTuts.getContent();
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("page", page);
+        response.put("pageSize", pageSize);
+        response.put("totalPages", pageTuts.getTotalPages());
+        response.put("user", users);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
 
     @DeleteMapping("/user/{userName}")
