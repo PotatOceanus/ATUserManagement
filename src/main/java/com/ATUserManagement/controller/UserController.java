@@ -72,6 +72,7 @@ public class UserController {
         User user = userServiceImpl.updateOneUser(user_to_update, user_update);
 
         userRepository.save(user);
+
         return new GlobalExceptionHandler();
     }
 }

@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
         User user_detail_generate = detail_generate(user_push);
         User user_detail_guess = detail_guess(user_push.getFirstName());
 
-        User user = new User(user_detail_generate.getUsername(),
+        return new User(user_detail_generate.getUsername(),
                 user_push.getPassword(),
                 user_push.getFirstName(),
                 user_push.getLastName(),
@@ -37,37 +37,37 @@ public class UserServiceImpl implements UserService {
                 user_detail_generate.getStatus(),
                 user_detail_generate.getCreated(),
                 user_detail_generate.getUpdated());
-
-        return user;
     }
 
     @Override
     public User updateOneUser(User user_to_update, User_detail_process user_push) {
+
+        if (user_to_update.getFirstName() != user_push.getFirstName() && user_push.getFirstName() != null) {
+            User user_detail_guess = detail_guess(user_push.getFirstName());
+            user_to_update.setFirstName(user_push.getFirstName());
+            user_to_update.setAge(user_detail_guess.getAge());
+            user_to_update.setGender(user_detail_guess.getGender());
+            user_to_update.setNationality(user_detail_guess.getNationality());
+        }
+
+        if (user_push.getLastName() != null) { user_to_update.setLastName(user_push.getLastName());}
+        if (user_push.getPassword() != null) { user_to_update.setPassword(user_push.getPassword());}
+        if (user_push.getContactNumber() != null) { user_to_update.setContactNumber(user_push.getContactNumber());}
+        if (user_push.getAge() != 0) { user_to_update.setAge(user_push.getAge());}
+        if (user_push.getGender() != null) { user_to_update.setGender(user_push.getGender());}
+        if (user_push.getNationality() != null) { user_to_update.setNationality(user_push.getNationality());}
+
         User user_detail_generate = detail_generate(user_push);
-        User user_detail_guess = detail_guess(user_push.getFirstName());
+        if (user_push.getTags() != null) { user_to_update.setPassword(user_detail_generate.getTags());}
+        user_to_update.setUpdated(user_detail_generate.getUpdated());
 
-        User user = new User(user_detail_generate.getUsername(),
-                user_push.getPassword(),
-                user_push.getFirstName(),
-                user_push.getLastName(),
-                user_to_update.getEmail(),
-                user_push.getContactNumber(),
-                user_detail_guess.getAge(),
-                user_detail_guess.getGender(),
-                user_detail_guess.getNationality(),
-                user_detail_generate.getTags(),
-                user_detail_generate.getStatus(),
-                user_to_update.getCreated(),
-                user_detail_generate.getUpdated());
-
-        return user;
+        return user_to_update;
     }
 
     public static String getStringDate() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         df.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String timestamp = df.format(new Date());
-        return timestamp;
+        return df.format(new Date());
     }
 
     public User detail_generate (User_detail_process user_detailprocess) {
