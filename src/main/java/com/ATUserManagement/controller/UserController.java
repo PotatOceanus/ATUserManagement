@@ -2,6 +2,7 @@ package com.ATUserManagement.controller;
 
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.User_detail_process;
+import com.ATUserManagement.entity.User_list;
 import com.ATUserManagement.exceptions.GlobalExceptionHandler;
 import com.ATUserManagement.exceptions.UserExistException;
 import com.ATUserManagement.exceptions.UserNotFoundException;
@@ -59,18 +60,19 @@ public class UserController {
     @GetMapping("/user/list")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> findUser(@RequestParam int page, @RequestParam int pageSize) {
-        List<User> users = new ArrayList<User>();
-        Pageable paging = PageRequest.of(page, pageSize);
 
+        Pageable paging = PageRequest.of(page, pageSize);
         Page<User> pageTuts;
         pageTuts = userRepository.findAll(paging);
-        users = pageTuts.getContent();
+
+        List<User> users = pageTuts.getContent();
+        List<User_list> users_list = userServiceImpl.listUsers(users);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("page", page);
         response.put("pageSize", pageSize);
         response.put("totalPages", pageTuts.getTotalPages());
-        response.put("user", users);
+        response.put("user", users_list);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

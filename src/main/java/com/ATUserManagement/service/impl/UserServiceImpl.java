@@ -2,6 +2,7 @@ package com.ATUserManagement.service.impl;
 
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.User_detail_process;
+import com.ATUserManagement.entity.User_list;
 import com.ATUserManagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,5 +105,19 @@ public class UserServiceImpl implements UserService {
         }
 
         return user_detail_guess;
+    }
+
+    public List<User_list> listUsers (List<User> users) {
+        List<User_list> user_lists = new ArrayList<>();
+        for (User user : users) {
+            User_list user_list = new User_list();
+            user_list.setFirstName(user.getFirstName());
+            user_list.setLastName(user.getLastName());
+            user_list.setEmail(user.getEmail());
+            user_list.setAge(user.getAge());
+            user_list.setTags(Arrays.asList(user.getTags().split(":")));
+            user_lists.add(user_list);
+        }
+        return user_lists;
     }
 }
