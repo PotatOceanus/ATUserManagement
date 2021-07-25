@@ -3,6 +3,7 @@ package com.ATUserManagement.controller;
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.User_detail_process;
 import com.ATUserManagement.exceptions.GlobalExceptionHandler;
+import com.ATUserManagement.exceptions.UserExistException;
 import com.ATUserManagement.exceptions.UserNotFoundException;
 import com.ATUserManagement.repository.UserRepository;
 import com.ATUserManagement.service.impl.UserServiceImpl;
@@ -26,9 +27,15 @@ public class UserController {
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void addUser(@RequestBody User_detail_process user_detail_process) {
-        User user = userServiceImpl.addNewUser(user_detail_process);
-        userRepository.save(user);
+    public void addUser(@RequestBody User_detail_process user_detail_process)
+            throws UserExistException {
+
+        if (!userRepository.findById(user_detail_process.getEmail()).isPresent()) {
+            User user = userServiceImpl.addNewUser(user_detail_process);
+            userRepository.save(user);
+        } else {
+            throw new UserExistException("User " + "{" + user_detail_process.getEmail() + "}" + " already Exist!");
+        }
     }
 
 //    @GetMapping("/find/{userName}")
@@ -64,7 +71,6 @@ public class UserController {
     @ResponseBody
     public GlobalExceptionHandler updateUser(@RequestBody User_detail_process user_update)
             throws UserNotFoundException {
-        System.out.println(user_update.getEmail());
         User user_to_update =
                 userRepository
                         .findById(user_update.getEmail())

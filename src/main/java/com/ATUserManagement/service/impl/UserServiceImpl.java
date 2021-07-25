@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         if (user_push.getNationality() != null) { user_to_update.setNationality(user_push.getNationality());}
 
         User user_detail_generate = detail_generate(user_push);
-        if (user_push.getTags() != null) { user_to_update.setPassword(user_detail_generate.getTags());}
+        if (user_push.getTags() != null) { user_to_update.setTags(user_detail_generate.getTags());}
         user_to_update.setUpdated(user_detail_generate.getUpdated());
 
         return user_to_update;

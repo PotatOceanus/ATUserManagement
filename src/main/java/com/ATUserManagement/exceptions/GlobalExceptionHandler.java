@@ -12,11 +12,19 @@ import java.util.Date;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> UserNotFoundException(
+    public ResponseEntity<?> UserNotFound(
             UserNotFoundException ex, WebRequest request) {
         ErrorResponse errorDetails =
                 new ErrorResponse(new Date(), "401",ex.getMessage(),request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserExistException.class)
+    public ResponseEntity<?> UserExistFound(
+            UserExistException ex, WebRequest request) {
+        ErrorResponse errorDetails =
+                new ErrorResponse(new Date(), "302",ex.getMessage(),request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.FOUND);
     }
 
 }
