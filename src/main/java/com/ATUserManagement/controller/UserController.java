@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void addUser(@RequestBody User_detail_process user_detail_process)
+    public void createOneUser(@RequestBody User_detail_process user_detail_process)
             throws UserExistException {
 
         if (!userRepository.findById(user_detail_process.getEmail()).isPresent()) {
@@ -45,7 +45,7 @@ public class UserController {
 
     @GetMapping("/user/{email}")
     @ResponseBody
-    public User_details findOneUser(@PathVariable(value = "email") String email)
+    public User_details listOneUserDetails(@PathVariable(value = "email") String email)
             throws UserNotFoundException {
         User user =
                 userRepository
@@ -58,7 +58,7 @@ public class UserController {
 
     @GetMapping("/user/list")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> findUser(@RequestParam int page, @RequestParam int pageSize) {
+    public ResponseEntity<Map<String, Object>> listAllUserInPages(@RequestParam int page, @RequestParam int pageSize) {
 
         Pageable paging = PageRequest.of(page, pageSize);
         Page<User> pageTuts;
@@ -90,7 +90,7 @@ public class UserController {
 
     @PutMapping("/user")
     @ResponseBody
-    public void updateUser(@RequestBody User_detail_process user_update)
+    public void updateOneUser(@RequestBody User_detail_process user_update)
             throws UserNotFoundException {
         User user_to_update =
                 userRepository
