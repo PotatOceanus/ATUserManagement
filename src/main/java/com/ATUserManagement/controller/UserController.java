@@ -4,7 +4,6 @@ import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.User_detail_process;
 import com.ATUserManagement.entity.User_details;
 import com.ATUserManagement.entity.User_list;
-import com.ATUserManagement.exceptions.GlobalExceptionHandler;
 import com.ATUserManagement.exceptions.UserExistException;
 import com.ATUserManagement.exceptions.UserNotFoundException;
 import com.ATUserManagement.repository.UserRepository;
@@ -28,9 +27,6 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userServiceImpl;
-//
-//    @Autowired
-//    private UpdateUserServiceImpl updateUserServiceImpl;
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
