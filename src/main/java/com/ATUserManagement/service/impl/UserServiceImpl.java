@@ -2,6 +2,7 @@ package com.ATUserManagement.service.impl;
 
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.User_detail_process;
+import com.ATUserManagement.entity.User_details;
 import com.ATUserManagement.entity.User_list;
 import com.ATUserManagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,5 +120,20 @@ public class UserServiceImpl implements UserService {
             user_lists.add(user_list);
         }
         return user_lists;
+    }
+
+    public User_details getOneUserDetails (User user) {
+        User_details user_details = new User_details();
+        user_details.setPassword(user.getPassword());
+        user_details.setFirstName(user.getFirstName());
+        user_details.setLastName(user.getLastName());
+        user_details.setEmail(user.getEmail());
+        user_details.setContactNumber(user.getContactNumber());
+        user_details.setAge(user.getAge());
+        user_details.setGender(user.getGender());
+        user_details.setNationality(user.getNationality());
+        user_details.setTags(Arrays.asList(user.getTags().split(":")));
+
+        return user_details;
     }
 }

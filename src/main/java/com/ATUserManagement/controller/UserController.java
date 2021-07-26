@@ -2,6 +2,7 @@ package com.ATUserManagement.controller;
 
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.User_detail_process;
+import com.ATUserManagement.entity.User_details;
 import com.ATUserManagement.entity.User_list;
 import com.ATUserManagement.exceptions.GlobalExceptionHandler;
 import com.ATUserManagement.exceptions.UserExistException;
@@ -46,17 +47,19 @@ public class UserController {
 
     }
 
-//    @GetMapping("/find/{userName}")
-//    @ResponseBody
-//    public User findOneUser(@PathVariable(value = "userName") String username)
-//            throws UserNotFoundException {
-//        User user =
-//                userRepository
-//                        .findById(username)
-//                        .orElseThrow(() -> new UserNotFoundException("User not found by this username : " + "{" + username + "}"));
-//        return user;
-//    }
-//
+    @GetMapping("/user/{email}")
+    @ResponseBody
+    public User_details findOneUser(@PathVariable(value = "email") String email)
+            throws UserNotFoundException {
+        User user =
+                userRepository
+                        .findById(email)
+                        .orElseThrow(() -> new UserNotFoundException("User not found by this username : " + "{" + email + "}"));
+        User_details user_details = userServiceImpl.getOneUserDetails(user);
+
+        return user_details;
+    }
+
     @GetMapping("/user/list")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> findUser(@RequestParam int page, @RequestParam int pageSize) {
