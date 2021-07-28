@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class User_list {
+public class AllUserList {
 
     private String firstName;
     private String lastName;

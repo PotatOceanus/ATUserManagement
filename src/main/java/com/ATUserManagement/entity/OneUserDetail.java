@@ -9,9 +9,8 @@ import java.util.List;
 
 @Getter
 @Setter
-public class User_detail_process {
+public class OneUserDetail {
 
-    private String username;
     private String password;
     private String firstName;
     private String lastName;
@@ -20,12 +19,7 @@ public class User_detail_process {
     private int age;
     private String gender;
     private String nationality;
-    private String status;
-    @EqualsAndHashCode.Exclude private String created;
-    @EqualsAndHashCode.Exclude private String updated;
-
     private List<String> tags;
-    private List<HashMap> country;
 
 //    @Override
 //    public String toString() {

@@ -1,9 +1,9 @@
 package com.ATUserManagement.controller;
 
 import com.ATUserManagement.entity.User;
-import com.ATUserManagement.entity.User_detail_process;
-import com.ATUserManagement.entity.User_details;
-import com.ATUserManagement.entity.User_list;
+import com.ATUserManagement.entity.UserDetailProcess;
+import com.ATUserManagement.entity.OneUserDetail;
+import com.ATUserManagement.entity.AllUserList;
 import com.ATUserManagement.exceptions.UserExistException;
 import com.ATUserManagement.exceptions.UserNotFoundException;
 import com.ATUserManagement.repository.UserRepository;
@@ -31,29 +31,29 @@ public class UserController {
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public void createOneUser(@RequestBody User_detail_process user_detail_process)
+    public void createOneUser(@RequestBody UserDetailProcess userCreateDetail)
             throws UserExistException {
 
-        if (!userRepository.findById(user_detail_process.getEmail()).isPresent()) {
-            User user = userServiceImpl.addNewUser(user_detail_process);
-            userRepository.save(user);
+        if (!userRepository.findById(userCreateDetail.getEmail()).isPresent()) {
+            User userNew = userServiceImpl.addNewUser(userCreateDetail);
+            userRepository.save(userNew);
         } else {
-            throw new UserExistException("User " + "{" + user_detail_process.getEmail() + "}" + " already Exist!");
+            throw new UserExistException("User " + "{" + userCreateDetail.getEmail() + "}" + " already Exist!");
         }
 
     }
 
     @GetMapping("/user/{email}")
     @ResponseBody
-    public User_details listOneUserDetails(@PathVariable(value = "email") String email)
+    public OneUserDetail listOneUserDetail(@PathVariable(value = "email") String email)
             throws UserNotFoundException {
         User user =
                 userRepository
                         .findById(email)
                         .orElseThrow(() -> new UserNotFoundException("User not found by this username : " + "{" + email + "}"));
-        User_details user_details = userServiceImpl.getOneUserDetails(user);
+        OneUserDetail oneUserDetail = userServiceImpl.getOneUserDetails(user);
 
-        return user_details;
+        return oneUserDetail;
     }
 
     @GetMapping("/user/list")
@@ -64,39 +64,39 @@ public class UserController {
         Page<User> pageTuts;
         pageTuts = userRepository.findAll(paging);
 
-        List<User> users = pageTuts.getContent();
-        List<User_list> users_list = userServiceImpl.listUsers(users);
+        List<User> usersInRepository = pageTuts.getContent();
+        List<AllUserList> allUserList= userServiceImpl.listUsers(usersInRepository);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("page", page);
         response.put("pageSize", pageSize);
         response.put("totalPages", pageTuts.getTotalPages());
-        response.put("user", users_list);
+        response.put("user", allUserList);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
-    @DeleteMapping("/user/{userName}")
+    @DeleteMapping("/user/{email}")
     @ResponseBody
-    public void deleteOneUser(@PathVariable(value = "userName") String username)
+    public void deleteOneUser(@PathVariable(value = "email") String email)
             throws UserNotFoundException {
         User user =
                 userRepository
-                        .findById(username)
+                        .findById(email)
                         .orElseThrow(() -> new UserNotFoundException(""));
-        userRepository.deleteById(username);
+        userRepository.deleteById(email);
     }
 
     @PutMapping("/user")
     @ResponseBody
-    public void updateOneUser(@RequestBody User_detail_process user_update)
+    public void updateOneUser(@RequestBody UserDetailProcess userUpdateDetail)
             throws UserNotFoundException {
-        User user_to_update =
+        User userToUpdate =
                 userRepository
-                        .findById(user_update.getEmail())
-                        .orElseThrow(() -> new UserNotFoundException("User(to update) not found by this username : " + "{" + user_update.getEmail() + "}"));
-        User user = userServiceImpl.updateOneUser(user_to_update, user_update);
+                        .findById(userUpdateDetail.getEmail())
+                        .orElseThrow(() -> new UserNotFoundException("User(to update) not found by this username : " + "{" + userUpdateDetail.getEmail() + "}"));
+        User user = userServiceImpl.updateOneUser(userToUpdate, userUpdateDetail);
 
         userRepository.save(user);
     }
