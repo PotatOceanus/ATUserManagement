@@ -159,7 +159,8 @@ public class UserControllerTests {
                 MockMvcRequestBuilders.get("/api/user-management/user/{email}","FirstTester@test.com"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-        assertEquals(result.getResponse().getContentAsString(), userController.listOneUserDetail("FirstTester@test.com").toString());
+        OneUserDetail oneUserDetail = userServiceImpl.getOneUserDetails(userFirst);
+        assertEquals(oneUserDetail.toString(), userController.listOneUserDetail("FirstTester@test.com").toString());
     }
 
     @Test
