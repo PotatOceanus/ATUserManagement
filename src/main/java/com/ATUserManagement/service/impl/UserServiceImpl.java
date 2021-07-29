@@ -117,6 +117,7 @@ public class UserServiceImpl implements UserService {
             userInList.setLastName(user.getLastName());
             userInList.setEmail(user.getEmail());
             userInList.setAge(user.getAge());
+            userInList.setContactNumber(user.getContactNumber());
             userInList.setTags(Arrays.asList(user.getTags().split(":")));
             allUserList.add(userInList);
         }

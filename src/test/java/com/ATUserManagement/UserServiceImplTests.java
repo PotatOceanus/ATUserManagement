@@ -92,11 +92,11 @@ public class UserServiceImplTests {
         userUpdateDetail.setTags(Arrays.asList("Test","Case","02","updateUser"));
 
         User userToUpdate = new User();
-        userToUpdate.setUsername("FirstTest@test.com");
+        userToUpdate.setUsername("FirstTester@test.com");
         userToUpdate.setPassword("123456");
         userToUpdate.setFirstName("First");
         userToUpdate.setLastName("Tester");
-        userToUpdate.setEmail("FirstTest@test.com");
+        userToUpdate.setEmail("FirstTester@test.com");
         userToUpdate.setContactNumber("654321");
         userToUpdate.setTags("Test:Case:01:addUser");
         userToUpdate.setAge(30);
@@ -111,7 +111,7 @@ public class UserServiceImplTests {
         doReturn(userDetailGuess).when(userServiceImpl).detailGuess(any());
 
         User userDetailGenerate = new User();
-        userDetailGenerate.setUsername("FirstTest@test.com");
+        userDetailGenerate.setUsername("FirstTester@test.com");
         userDetailGenerate.setTags("Test:Case:02:updateUser");
         userDetailGenerate.setStatus("active");
         doReturn(userDetailGenerate).when(userServiceImpl).detailGenerate(any());
@@ -119,11 +119,11 @@ public class UserServiceImplTests {
         when(userServiceImpl.updateOneUser(userToUpdate,userUpdateDetail)).thenCallRealMethod();
         User user = userServiceImpl.updateOneUser(userToUpdate,userUpdateDetail);
 
-        assertEquals("FirstTest@test.com",user.getUsername());
+        assertEquals("FirstTester@test.com",user.getUsername());
         assertEquals("234567",user.getPassword());
         assertEquals("Second",user.getFirstName());
         assertEquals("Tester",user.getLastName());
-        assertEquals("FirstTest@test.com",user.getEmail());
+        assertEquals("FirstTester@test.com",user.getEmail());
         assertEquals("765432",user.getContactNumber());
         assertEquals(31,user.getAge());
         assertEquals("female",user.getGender());
@@ -136,13 +136,13 @@ public class UserServiceImplTests {
     public void detailGenerateTest () {
 
         UserDetailProcess userDetailPost = new UserDetailProcess();
-        userDetailPost.setEmail("ThirdTest@test.com");
+        userDetailPost.setEmail("ThirdTester@test.com");
         userDetailPost.setTags(Arrays.asList("Test","Case","03","detailGenerate"));
 
         when(userServiceImpl.detailGenerate(userDetailPost)).thenCallRealMethod();
         User userDetailGenerate = userServiceImpl.detailGenerate(userDetailPost);
 
-        assertEquals("ThirdTest@test.com", userDetailGenerate.getUsername());
+        assertEquals("ThirdTester@test.com", userDetailGenerate.getUsername());
         assertEquals("Test:Case:03:detailGenerate", userDetailGenerate.getTags());
         assertEquals("active",userDetailGenerate.getStatus());
     }
@@ -178,7 +178,7 @@ public class UserServiceImplTests {
     public void listUsersTest () {
 
         List<User> userInRepository = new ArrayList<>();
-        User user = new User("FiveTest@test.com","567891","Five","Test","FiveTest@test.com","198765",30,"male","TW","Test:Case:05:listUsers","active","20210728","20210728");
+        User user = new User("FiveTester@test.com","567891","Five","Test","FiveTester@test.com","198765",30,"male","TW","Test:Case:05:listUsers","active","20210728","20210728");
         userInRepository.add(user);
 
         when(userServiceImpl.listUsers(userInRepository)).thenCallRealMethod();
@@ -186,14 +186,14 @@ public class UserServiceImplTests {
 
         assertEquals("Five",allUserList.get(0).getFirstName());
         assertEquals("Test",allUserList.get(0).getLastName());
-        assertEquals("FiveTest@test.com",allUserList.get(0).getEmail());
+        assertEquals("FiveTester@test.com",allUserList.get(0).getEmail());
         assertEquals(30,allUserList.get(0).getAge());
         assertEquals(Arrays.asList("Test","Case","05","listUsers"),allUserList.get(0).getTags());
     }
 
     @Test
     public void getOneUserDetailsTest () {
-        User userInRepository = new User("SixTest@test.com","678912","Six","Test","SixTest@test.com","219876",30,"male","TW","Test:Case:06:listOneUser","active","20210728","20210728");
+        User userInRepository = new User("SixTester@test.com","678912","Six","Test","SixTester@test.com","219876",30,"male","TW","Test:Case:06:listOneUser","active","20210728","20210728");
 
         when(userServiceImpl.getOneUserDetails(userInRepository)).thenCallRealMethod();
         OneUserDetail userDetail = userServiceImpl.getOneUserDetails(userInRepository);
@@ -201,7 +201,7 @@ public class UserServiceImplTests {
         assertEquals("678912", userDetail.getPassword());
         assertEquals("Six", userDetail.getFirstName());
         assertEquals("Test", userDetail.getLastName());
-        assertEquals("SixTest@test.com", userDetail.getEmail());
+        assertEquals("SixTester@test.com", userDetail.getEmail());
         assertEquals("219876", userDetail.getContactNumber());
         assertEquals(30, userDetail.getAge());
         assertEquals("male", userDetail.getGender());
