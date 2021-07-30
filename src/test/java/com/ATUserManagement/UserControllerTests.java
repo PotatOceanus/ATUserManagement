@@ -86,7 +86,6 @@ public class UserControllerTests {
             "2021-07-28T23:10:36.858Z");
 
 
-
     @Test
     public void createOneUserTestError () throws Exception {
 
@@ -187,6 +186,97 @@ public class UserControllerTests {
         assertEquals(allUserLists.toString(), userController.listAllUserInPages(1,2).getBody().get("user").toString());
     }
 
+    @Test
+    public void deleteOneUserNormal() throws Exception {
 
+        Mockito.when(userRepository.findById("FirstTester@test.com")).thenReturn(java.util.Optional.of(userFirst));
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/user-management/user/{email}","FirstTester@test.com"))
+                .andDo(print())
+                .andReturn();
+
+        assertEquals(200,result.getResponse().getStatus());
+        verify(userRepository, times(1)).deleteById("FirstTester@test.com");
+    }
+
+    @Test
+    public void deleteOneUserError() throws Exception {
+        String email = "FirstTester@test.com";
+        Mockito.when(userRepository.findById(email)).thenReturn(Optional.empty());
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.delete("/api/user-management/user/{email}",email))
+                .andDo(print())
+                .andReturn();
+
+        assertEquals(404, result.getResponse().getStatus());
+        assertEquals("User(to delete) not found by this username : " + "{" +email + "}", result.getResolvedException().getMessage());
+    }
+
+    @Test
+    public void updateOneUserNormal() throws Exception {
+        String email = "FirstTester@test.com";
+        Mockito.when(userRepository.findById(email)).thenReturn(java.util.Optional.of(userFirst));
+
+        UserDetailProcess userDetailProcess = new UserDetailProcess();
+        userDetailProcess.setPassword("345678");
+        userDetailProcess.setFirstName("Third");
+        userDetailProcess.setLastName("Tester");
+        userDetailProcess.setEmail("FirstTester@test.com");
+        userDetailProcess.setContactNumber("876543");
+        userDetailProcess.setTags(Arrays.asList("Tester","03","UserController"));
+
+        User userThird = new User("FirstTester@test.com",
+                "345678",
+                "Third",
+                "Tester",
+                "FirstTester@test.com",
+                "876543",
+                30,
+                "male",
+                "US",
+                "Tester:03:UserController",
+                "active",
+                "2021-07-28T22:10:36.858Z",
+                "2021-07-28T22:10:36.858Z");
+        doReturn(userThird).when(userServiceImpl).updateOneUser(any(User.class),any(UserDetailProcess.class));
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/user-management/user")
+                        .content(JSON.toJSONString(userDetailProcess))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andReturn();
+
+        verify((userRepository),times(1)).findById(email);
+        verify((userRepository),times(1)).save(userThird);
+    }
+
+    @Test
+    public void updateOneUserError() throws Exception {
+        String email = "FirstTester@test.com";
+        Mockito.when(userRepository.findById(email)).thenReturn(Optional.empty());
+
+        UserDetailProcess userDetailProcess = new UserDetailProcess();
+        userDetailProcess.setPassword("345678");
+        userDetailProcess.setFirstName("Third");
+        userDetailProcess.setLastName("Tester");
+        userDetailProcess.setEmail("FirstTester@test.com");
+        userDetailProcess.setContactNumber("876543");
+        userDetailProcess.setTags(Arrays.asList("Tester","03","UserController"));
+
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/user-management/user")
+                        .content(JSON.toJSONString(userDetailProcess))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andReturn();
+
+        assertEquals(404, result.getResponse().getStatus());
+        assertEquals("User(to update) not found by this username : " + "{" + email + "}", result.getResolvedException().getMessage());
+    }
 
 }

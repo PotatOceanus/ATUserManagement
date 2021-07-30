@@ -84,7 +84,7 @@ public class UserController {
         User user =
                 userRepository
                         .findById(email)
-                        .orElseThrow(() -> new UserNotFoundException(""));
+                        .orElseThrow(() -> new UserNotFoundException("User(to delete) not found by this username : " + "{" + email + "}"));
         userRepository.deleteById(email);
     }
 
