@@ -103,7 +103,6 @@ public class UserControllerTests {
                 .content(JSON.toJSONString(userCreateDetail))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andReturn();
         assertEquals(302, result.getResponse().getStatus());
         verify(userRepository, times(0)).save(userFirst);
@@ -126,7 +125,6 @@ public class UserControllerTests {
                 .content(JSON.toJSONString(userCreateDetail))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andReturn();
         assertEquals(201, result.getResponse().getStatus());
         verify(userRepository, times(1)).save(userFirst);
@@ -141,7 +139,6 @@ public class UserControllerTests {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/user-management/user/{email}",email))
-                .andDo(print())
                 .andReturn();
         assertEquals(404, result.getResponse().getStatus());
         assertEquals("User not found by this username : " + "{" + email + "}", result.getResolvedException().getMessage());
@@ -194,7 +191,6 @@ public class UserControllerTests {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/user-management/user/{email}",email))
-                .andDo(print())
                 .andReturn();
 
         assertEquals(200,result.getResponse().getStatus());
@@ -208,7 +204,6 @@ public class UserControllerTests {
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/user-management/user/{email}",email))
-                .andDo(print())
                 .andReturn();
 
         assertEquals(404, result.getResponse().getStatus());
@@ -248,7 +243,6 @@ public class UserControllerTests {
                         .content(JSON.toJSONString(userDetailProcess))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andReturn();
 
         verify((userRepository),times(1)).findById(email);
@@ -273,7 +267,6 @@ public class UserControllerTests {
                         .content(JSON.toJSONString(userDetailProcess))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
                 .andReturn();
 
         assertEquals(404, result.getResponse().getStatus());
