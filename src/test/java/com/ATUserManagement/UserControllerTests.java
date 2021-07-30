@@ -140,11 +140,11 @@ public class UserControllerTests {
         Mockito.when(userRepository.findById(email)).thenReturn(Optional.empty());
 
         MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/user-management/user/{email}","FirstTester@test.com"))
+                MockMvcRequestBuilders.get("/api/user-management/user/{email}",email))
                 .andDo(print())
                 .andReturn();
         assertEquals(404, result.getResponse().getStatus());
-        assertEquals("User not found by this username : " + "{" + "FirstTester@test.com" + "}", result.getResolvedException().getMessage());
+        assertEquals("User not found by this username : " + "{" + email + "}", result.getResolvedException().getMessage());
     }
 
     @Test
@@ -155,11 +155,11 @@ public class UserControllerTests {
         when(userServiceImpl.getOneUserDetails(userFirst)).thenCallRealMethod();
 
         MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/user-management/user/{email}","FirstTester@test.com"))
+                MockMvcRequestBuilders.get("/api/user-management/user/{email}",email))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
         OneUserDetail oneUserDetail = userServiceImpl.getOneUserDetails(userFirst);
-        assertEquals(oneUserDetail.toString(), userController.listOneUserDetail("FirstTester@test.com").toString());
+        assertEquals(oneUserDetail.toString(), userController.listOneUserDetail(email).toString());
     }
 
     @Test
@@ -189,15 +189,16 @@ public class UserControllerTests {
     @Test
     public void deleteOneUserNormal() throws Exception {
 
-        Mockito.when(userRepository.findById("FirstTester@test.com")).thenReturn(java.util.Optional.of(userFirst));
+        String email = "FirstTester@test.com";
+        Mockito.when(userRepository.findById(email)).thenReturn(java.util.Optional.of(userFirst));
 
         MvcResult result = mockMvc.perform(
-                MockMvcRequestBuilders.delete("/api/user-management/user/{email}","FirstTester@test.com"))
+                MockMvcRequestBuilders.delete("/api/user-management/user/{email}",email))
                 .andDo(print())
                 .andReturn();
 
         assertEquals(200,result.getResponse().getStatus());
-        verify(userRepository, times(1)).deleteById("FirstTester@test.com");
+        verify(userRepository, times(1)).deleteById(email);
     }
 
     @Test
