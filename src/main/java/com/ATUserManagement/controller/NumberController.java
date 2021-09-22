@@ -18,9 +18,7 @@ public class NumberController {
     @ResponseBody
     public HashMap calculate996(@RequestParam int max, @RequestParam int divisor, @RequestParam int limit) {
 
-        HashMap response = numberServiceImpl.calculator996(max, divisor, limit);
-
-        return response;
+        return numberServiceImpl.calculator996(max, divisor, limit);
     }
 
 }
