@@ -1,7 +1,7 @@
 package com.ATUserManagement;
 
-import com.ATUserManagement.entity.AllUserList;
-import com.ATUserManagement.entity.OneUserDetail;
+import com.ATUserManagement.entity.UserSummary;
+import com.ATUserManagement.entity.UserDetails;
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.UserDetailProcess;
 import com.ATUserManagement.service.impl.UserServiceImpl;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 
@@ -182,13 +181,13 @@ public class UserServiceImplTests {
         userInRepository.add(user);
 
         when(userServiceImpl.listUsers(userInRepository)).thenCallRealMethod();
-        List<AllUserList> allUserList = userServiceImpl.listUsers(userInRepository);
+        List<UserSummary> userSummary = userServiceImpl.listUsers(userInRepository);
 
-        assertEquals("Five",allUserList.get(0).getFirstName());
-        assertEquals("Test",allUserList.get(0).getLastName());
-        assertEquals("FiveTester@test.com",allUserList.get(0).getEmail());
-        assertEquals(30,allUserList.get(0).getAge());
-        assertEquals(Arrays.asList("Test","Case","05","listUsers"),allUserList.get(0).getTags());
+        assertEquals("Five", userSummary.get(0).getFirstName());
+        assertEquals("Test", userSummary.get(0).getLastName());
+        assertEquals("FiveTester@test.com", userSummary.get(0).getEmail());
+        assertEquals(30, userSummary.get(0).getAge());
+        assertEquals(Arrays.asList("Test","Case","05","listUsers"), userSummary.get(0).getTags());
     }
 
     @Test
@@ -196,7 +195,7 @@ public class UserServiceImplTests {
         User userInRepository = new User("SixTester@test.com","678912","Six","Test","SixTester@test.com","219876",30,"male","TW","Test:Case:06:listOneUser","active","20210728","20210728");
 
         when(userServiceImpl.getOneUserDetails(userInRepository)).thenCallRealMethod();
-        OneUserDetail userDetail = userServiceImpl.getOneUserDetails(userInRepository);
+        UserDetails userDetail = userServiceImpl.getOneUserDetails(userInRepository);
 
         assertEquals("678912", userDetail.getPassword());
         assertEquals("Six", userDetail.getFirstName());

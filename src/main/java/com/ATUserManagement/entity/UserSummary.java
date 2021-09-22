@@ -1,24 +1,23 @@
 package com.ATUserManagement.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.List;
 
 @Getter
 @Setter
-public class OneUserDetail {
+public class UserSummary {
 
-    private String password;
     private String firstName;
     private String lastName;
     private String email;
-    private String contactNumber;
     private int age;
-    private String gender;
-    private String nationality;
+    private String contactNumber;
     private List<String> tags;
 
     @Override
@@ -30,14 +29,11 @@ public class OneUserDetail {
         tags_print = tags_print + "\"" + tags.get(tags.size() - 1) + "\"";
 
         return "{"
-                + "\"password\"" + ":\"" +password + "\","
                 + "\"firstName\"" + ":\"" +firstName + "\","
                 + "\"lastName\"" + ":\"" +lastName + "\","
                 + "\"email\"" + ":\"" +email + "\","
-                + "\"contactNumber\"" + ":\"" + contactNumber + "\","
                 + "\"age\"" + ":" + age + ","
-                + "\"gender\"" + ":\"" + gender + "\","
-                + "\"nationality\"" + ":\"" + nationality + "\","
+                + "\"contactNumber\"" + ":\"" + contactNumber + "\","
                 + "\"tags\"" + ":[" + tags_print + "]"
                 + "}";
     }

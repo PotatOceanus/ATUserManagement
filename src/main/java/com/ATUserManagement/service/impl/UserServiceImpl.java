@@ -2,8 +2,8 @@ package com.ATUserManagement.service.impl;
 
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.UserDetailProcess;
-import com.ATUserManagement.entity.OneUserDetail;
-import com.ATUserManagement.entity.AllUserList;
+import com.ATUserManagement.entity.UserDetails;
+import com.ATUserManagement.entity.UserSummary;
 import com.ATUserManagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -109,23 +109,23 @@ public class UserServiceImpl implements UserService {
         return userDetailGuess;
     }
 
-    public List<AllUserList> listUsers (List<User> userInRepository) {
-        List<AllUserList> allUserList = new ArrayList<>();
+    public List<UserSummary> listUsers (List<User> userInRepository) {
+        List<UserSummary> userSummary = new ArrayList<>();
         for (User user : userInRepository) {
-            AllUserList userInList = new AllUserList();
+            UserSummary userInList = new UserSummary();
             userInList.setFirstName(user.getFirstName());
             userInList.setLastName(user.getLastName());
             userInList.setEmail(user.getEmail());
             userInList.setAge(user.getAge());
             userInList.setContactNumber(user.getContactNumber());
             userInList.setTags(Arrays.asList(user.getTags().split(":")));
-            allUserList.add(userInList);
+            userSummary.add(userInList);
         }
-        return allUserList;
+        return userSummary;
     }
 
-    public OneUserDetail getOneUserDetails (User userInRepository) {
-        OneUserDetail userDetail = new OneUserDetail();
+    public UserDetails getOneUserDetails (User userInRepository) {
+        UserDetails userDetail = new UserDetails();
         userDetail.setPassword(userInRepository.getPassword());
         userDetail.setFirstName(userInRepository.getFirstName());
         userDetail.setLastName(userInRepository.getLastName());

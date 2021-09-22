@@ -1,12 +1,10 @@
 package com.ATUserManagement;
 
 import com.ATUserManagement.controller.UserController;
-import com.ATUserManagement.entity.AllUserList;
-import com.ATUserManagement.entity.OneUserDetail;
+import com.ATUserManagement.entity.UserSummary;
+import com.ATUserManagement.entity.UserDetails;
 import com.ATUserManagement.entity.User;
 import com.ATUserManagement.entity.UserDetailProcess;
-import com.ATUserManagement.exceptions.UserExistException;
-import com.ATUserManagement.exceptions.UserNotFoundException;
 import com.ATUserManagement.repository.UserRepository;
 import com.ATUserManagement.service.impl.UserServiceImpl;
 import com.alibaba.fastjson.JSON;
@@ -20,15 +18,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -155,8 +150,8 @@ public class UserControllerTests {
                 MockMvcRequestBuilders.get("/api/user-management/user/{email}",email))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
-        OneUserDetail oneUserDetail = userServiceImpl.getOneUserDetails(userFirst);
-        assertEquals(oneUserDetail.toString(), userController.listOneUserDetail(email).toString());
+        UserDetails userDetails = userServiceImpl.getOneUserDetails(userFirst);
+        assertEquals(userDetails.toString(), userController.listOneUserDetail(email).toString());
     }
 
     @Test
@@ -179,8 +174,8 @@ public class UserControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
-        List<AllUserList> allUserLists = userServiceImpl.listUsers(usersInRepository);
-        assertEquals(allUserLists.toString(), userController.listAllUserInPages(1,2).getBody().get("user").toString());
+        List<UserSummary> userSummaries = userServiceImpl.listUsers(usersInRepository);
+        assertEquals(userSummaries.toString(), userController.listAllUserInPages(1,2).getUsers().toString());
     }
 
     @Test
