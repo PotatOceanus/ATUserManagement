@@ -1,10 +1,7 @@
 package com.ATUserManagement;
 
 import com.ATUserManagement.controller.UserController;
-import com.ATUserManagement.entity.UserSummary;
-import com.ATUserManagement.entity.UserDetails;
-import com.ATUserManagement.entity.User;
-import com.ATUserManagement.entity.UserDetailProcess;
+import com.ATUserManagement.entity.*;
 import com.ATUserManagement.repository.UserRepository;
 import com.ATUserManagement.service.impl.UserServiceImpl;
 import com.alibaba.fastjson.JSON;
@@ -106,18 +103,18 @@ public class UserControllerTests {
     @Test
     public void createOneUserTestNormal () throws Exception {
 
-        UserDetailProcess userCreateDetail = new UserDetailProcess();
-        userCreateDetail.setPassword("123456");
-        userCreateDetail.setFirstName("First");
-        userCreateDetail.setLastName("Tester");
-        userCreateDetail.setEmail("FirstTester@test.com");
-        userCreateDetail.setContactNumber("654321");
-        userCreateDetail.setTags(Arrays.asList("Tester","01","UserController"));
+        AddUserRequest addUserRequest = new AddUserRequest();
+        addUserRequest.setPassword("123456");
+        addUserRequest.setFirstName("First");
+        addUserRequest.setLastName("Tester");
+        addUserRequest.setEmail("FirstTester@test.com");
+        addUserRequest.setContactNumber("654321");
+        addUserRequest.setTags(Arrays.asList("Tester","01","UserController"));
 
-        doReturn(userFirst).when(userServiceImpl).addNewUser(any(UserDetailProcess.class));
+        doReturn(userFirst).when(userServiceImpl).addNewUser(any(AddUserRequest.class));
 
         MvcResult result = mockMvc.perform(post("/api/user-management/user")
-                .content(JSON.toJSONString(userCreateDetail))
+                .content(JSON.toJSONString(addUserRequest))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -231,7 +228,7 @@ public class UserControllerTests {
                 "active",
                 "2021-07-28T22:10:36.858Z",
                 "2021-07-28T22:10:36.858Z");
-        doReturn(userThird).when(userServiceImpl).updateOneUser(any(User.class),any(UserDetailProcess.class));
+        doReturn(userThird).when(userServiceImpl).updateOneUser(any(User.class),any(AddUserRequest.class));
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/user-management/user")

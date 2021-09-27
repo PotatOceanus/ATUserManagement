@@ -1,9 +1,6 @@
 package com.ATUserManagement.service.impl;
 
-import com.ATUserManagement.entity.User;
-import com.ATUserManagement.entity.UserDetailProcess;
-import com.ATUserManagement.entity.UserDetails;
-import com.ATUserManagement.entity.UserSummary;
+import com.ATUserManagement.entity.*;
 import com.ATUserManagement.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +18,16 @@ public class UserServiceImpl implements UserService {
     RestTemplate restTemplate;
 
     @Override
-    public User addNewUser(UserDetailProcess userCreateDetail) {
-        User userDetailGenerate = detailGenerate(userCreateDetail);
-        User userDetailGuess = detailGuess(userCreateDetail.getFirstName());
+    public User addNewUser(AddUserRequest addUserRequest) {
+        User userDetailGenerate = detailGenerate(addUserRequest);
+        User userDetailGuess = detailGuess(addUserRequest.getFirstName());
 
         return new User(userDetailGenerate.getUsername(),
-                userCreateDetail.getPassword(),
-                userCreateDetail.getFirstName(),
-                userCreateDetail.getLastName(),
-                userCreateDetail.getEmail(),
-                userCreateDetail.getContactNumber(),
+                addUserRequest.getPassword(),
+                addUserRequest.getFirstName(),
+                addUserRequest.getLastName(),
+                addUserRequest.getEmail(),
+                addUserRequest.getContactNumber(),
                 userDetailGuess.getAge(),
                 userDetailGuess.getGender(),
                 userDetailGuess.getNationality(),
@@ -41,25 +38,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateOneUser(User userToUpdate, UserDetailProcess userUpdateDetail) {
+    public User updateOneUser(User userToUpdate, AddUserRequest addUserRequest) {
 
-        if (userToUpdate.getFirstName() != userUpdateDetail.getFirstName() && userUpdateDetail.getFirstName() != null) {
-            User userDetailGuess = detailGuess(userUpdateDetail.getFirstName());
-            userToUpdate.setFirstName(userUpdateDetail.getFirstName());
+        if (userToUpdate.getFirstName() != addUserRequest.getFirstName() && addUserRequest.getFirstName() != null) {
+            User userDetailGuess = detailGuess(addUserRequest.getFirstName());
+            userToUpdate.setFirstName(addUserRequest.getFirstName());
             userToUpdate.setAge(userDetailGuess.getAge());
             userToUpdate.setGender(userDetailGuess.getGender());
             userToUpdate.setNationality(userDetailGuess.getNationality());
         }
 
-        if (userUpdateDetail.getLastName() != null) { userToUpdate.setLastName(userUpdateDetail.getLastName());}
-        if (userUpdateDetail.getPassword() != null) { userToUpdate.setPassword(userUpdateDetail.getPassword());}
-        if (userUpdateDetail.getContactNumber() != null) { userToUpdate.setContactNumber(userUpdateDetail.getContactNumber());}
-        if (userUpdateDetail.getAge() != 0) { userToUpdate.setAge(userUpdateDetail.getAge());}
-        if (userUpdateDetail.getGender() != null) { userToUpdate.setGender(userUpdateDetail.getGender());}
-        if (userUpdateDetail.getNationality() != null) { userToUpdate.setNationality(userUpdateDetail.getNationality());}
+        if (addUserRequest.getLastName() != null) { userToUpdate.setLastName(addUserRequest.getLastName());}
+        if (addUserRequest.getPassword() != null) { userToUpdate.setPassword(addUserRequest.getPassword());}
+        if (addUserRequest.getContactNumber() != null) { userToUpdate.setContactNumber(addUserRequest.getContactNumber());}
+//        if (addUserRequest.getAge() != 0) { userToUpdate.setAge(userUpdateDetail.getAge());}
+//        if (addUserRequest.getGender() != null) { userToUpdate.setGender(userUpdateDetail.getGender());}
+//        if (addUserRequest.getNationality() != null) { userToUpdate.setNationality(userUpdateDetail.getNationality());}
 
-        User userDetailGenerate = detailGenerate(userUpdateDetail);
-        if (userUpdateDetail.getTags() != null) { userToUpdate.setTags(userDetailGenerate.getTags());}
+        User userDetailGenerate = detailGenerate(addUserRequest);
+        if (addUserRequest.getTags() != null) { userToUpdate.setTags(userDetailGenerate.getTags());}
         userToUpdate.setUpdated(userDetailGenerate.getUpdated());
 
         return userToUpdate;
@@ -71,13 +68,13 @@ public class UserServiceImpl implements UserService {
         return df.format(new Date());
     }
 
-    public User detailGenerate (UserDetailProcess userDetailPost) {
+    public User detailGenerate (AddUserRequest addUserRequest) {
 
         User userDetailGenerate = new User();
 
-        userDetailGenerate.setUsername(userDetailPost.getEmail());
+        userDetailGenerate.setUsername(addUserRequest.getEmail());
 
-        String tags = userDetailPost.getTags().stream().collect(Collectors.joining(":"));
+        String tags = addUserRequest.getTags().stream().collect(Collectors.joining(":"));
         userDetailGenerate.setTags(tags);
 
         userDetailGenerate.setStatus("active");

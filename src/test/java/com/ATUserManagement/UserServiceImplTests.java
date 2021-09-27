@@ -1,9 +1,6 @@
 package com.ATUserManagement;
 
-import com.ATUserManagement.entity.UserSummary;
-import com.ATUserManagement.entity.UserDetails;
-import com.ATUserManagement.entity.User;
-import com.ATUserManagement.entity.UserDetailProcess;
+import com.ATUserManagement.entity.*;
 import com.ATUserManagement.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,13 +39,13 @@ public class UserServiceImplTests {
     @Test
     public void addNewUserTest () {
 
-        UserDetailProcess userCreateDetail = new UserDetailProcess();
-        userCreateDetail.setPassword("123456");
-        userCreateDetail.setFirstName("First");
-        userCreateDetail.setLastName("Tester");
-        userCreateDetail.setEmail("FirstTest@test.com");
-        userCreateDetail.setContactNumber("654321");
-        userCreateDetail.setTags(Arrays.asList("Test","Case","01","addUser"));
+        AddUserRequest addUserRequest = new AddUserRequest();
+        addUserRequest.setPassword("123456");
+        addUserRequest.setFirstName("First");
+        addUserRequest.setLastName("Tester");
+        addUserRequest.setEmail("FirstTest@test.com");
+        addUserRequest.setContactNumber("654321");
+        addUserRequest.setTags(Arrays.asList("Test","Case","01","addUser"));
 
         User userDetailGuess = new User();
         userDetailGuess.setAge(30);
@@ -62,8 +59,8 @@ public class UserServiceImplTests {
         userDetailGenerate.setStatus("active");
         doReturn(userDetailGenerate).when(userServiceImpl).detailGenerate(any());
 
-        when(userServiceImpl.addNewUser(userCreateDetail)).thenCallRealMethod();
-        User user = userServiceImpl.addNewUser(userCreateDetail);
+        when(userServiceImpl.addNewUser(addUserRequest)).thenCallRealMethod();
+        User user = userServiceImpl.addNewUser(addUserRequest);
 
         assertEquals("FirstTest@test.com",user.getUsername());
         assertEquals("123456",user.getPassword());
@@ -82,13 +79,13 @@ public class UserServiceImplTests {
     @Test
     public void updateOneUserTest () {
 
-        UserDetailProcess userUpdateDetail = new UserDetailProcess();
-        userUpdateDetail.setPassword("234567");
-        userUpdateDetail.setFirstName("Second");
-        userUpdateDetail.setLastName("Tester");
-        userUpdateDetail.setEmail("FirstTest@test.com");
-        userUpdateDetail.setContactNumber("765432");
-        userUpdateDetail.setTags(Arrays.asList("Test","Case","02","updateUser"));
+        AddUserRequest addUserRequest = new AddUserRequest();
+        addUserRequest.setPassword("234567");
+        addUserRequest.setFirstName("Second");
+        addUserRequest.setLastName("Tester");
+        addUserRequest.setEmail("FirstTest@test.com");
+        addUserRequest.setContactNumber("765432");
+        addUserRequest.setTags(Arrays.asList("Test","Case","02","updateUser"));
 
         User userToUpdate = new User();
         userToUpdate.setUsername("FirstTester@test.com");
@@ -115,8 +112,8 @@ public class UserServiceImplTests {
         userDetailGenerate.setStatus("active");
         doReturn(userDetailGenerate).when(userServiceImpl).detailGenerate(any());
 
-        when(userServiceImpl.updateOneUser(userToUpdate,userUpdateDetail)).thenCallRealMethod();
-        User user = userServiceImpl.updateOneUser(userToUpdate,userUpdateDetail);
+        when(userServiceImpl.updateOneUser(userToUpdate,addUserRequest)).thenCallRealMethod();
+        User user = userServiceImpl.updateOneUser(userToUpdate,addUserRequest);
 
         assertEquals("FirstTester@test.com",user.getUsername());
         assertEquals("234567",user.getPassword());
@@ -134,12 +131,12 @@ public class UserServiceImplTests {
     @Test
     public void detailGenerateTest () {
 
-        UserDetailProcess userDetailPost = new UserDetailProcess();
-        userDetailPost.setEmail("ThirdTester@test.com");
-        userDetailPost.setTags(Arrays.asList("Test","Case","03","detailGenerate"));
+        AddUserRequest addUserRequest = new AddUserRequest();
+        addUserRequest.setEmail("ThirdTester@test.com");
+        addUserRequest.setTags(Arrays.asList("Test","Case","03","detailGenerate"));
 
-        when(userServiceImpl.detailGenerate(userDetailPost)).thenCallRealMethod();
-        User userDetailGenerate = userServiceImpl.detailGenerate(userDetailPost);
+        when(userServiceImpl.detailGenerate(addUserRequest)).thenCallRealMethod();
+        User userDetailGenerate = userServiceImpl.detailGenerate(addUserRequest);
 
         assertEquals("ThirdTester@test.com", userDetailGenerate.getUsername());
         assertEquals("Test:Case:03:detailGenerate", userDetailGenerate.getTags());
