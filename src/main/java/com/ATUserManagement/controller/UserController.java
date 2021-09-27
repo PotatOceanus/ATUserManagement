@@ -58,16 +58,16 @@ public class UserController {
     public UserPaginationResponse listAllUserInPages(@RequestParam int page, @RequestParam int pageSize) {
 
         Pageable paging = PageRequest.of(page, pageSize);
-        Page<User> pageTuts;
-        pageTuts = userRepository.findAll(paging);
+        Page<User> allUsersInPages;
+        allUsersInPages = userRepository.findAll(paging);
 
-        List<User> usersInRepository = pageTuts.getContent();
+        List<User> usersInRepository = allUsersInPages.getContent();
         List<UserSummary> userSummary = userServiceImpl.listUsers(usersInRepository);
 
         UserPaginationResponse response = new UserPaginationResponse();
         response.setPage(page);
         response.setPageSize(pageSize);
-        response.setTotalPage(pageTuts.getTotalPages());
+        response.setTotalPage(allUsersInPages.getTotalPages());
         response.setUsers(userSummary);
 
         return response;
@@ -77,10 +77,7 @@ public class UserController {
     @ResponseBody
     public void deleteOneUser(@PathVariable(value = "email") String email)
             throws UserNotFoundException {
-        User user =
-                userRepository
-                        .findById(email)
-                        .orElseThrow(() -> new UserNotFoundException("User(to delete) not found by this username : " + "{" + email + "}"));
+
         userRepository.deleteById(email);
     }
 
